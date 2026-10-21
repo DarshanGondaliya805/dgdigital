@@ -6,7 +6,7 @@
    Template variables used: {{from_name}} {{from_email}} {{reply_to}}
    {{type}} {{budget}} {{message}} {{subject}}
    ===================================================== */
-var EMAILJS_CONFIG={publicKey:'uKyqY3aBYCmwmKcS',serviceId:'RnYnbq_C6gjfcCi5a1G3f',templateId:'template_d0x2kmj'};
+var EMAILJS_CONFIG={publicKey:'uKyqY3aBYCmwmKcS-',serviceId:'RnYnbq_C6gjfcCi5a1G3f',templateId:'template_d0x2kmj'};
 
 (function(){
 var TO='darshan.gondaliya0261@gmail.com',R=document.documentElement,$=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
