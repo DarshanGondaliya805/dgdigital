@@ -1,12 +1,17 @@
 /* =====================================================
-   EMAILJS SETUP: paste your three keys below
-   1) Public Key  -> emailjs.com > Account > General
-   2) Service ID  -> emailjs.com > Email Services
-   3) Template ID -> emailjs.com > Email Templates
-   Template variables used: {{from_name}} {{from_email}} {{reply_to}}
-   {{type}} {{budget}} {{message}} {{subject}}
+   EMAILJS SETUP: paste your keys below
+   publicKey           -> emailjs.com > Account > General
+   serviceId           -> emailjs.com > Email Services
+   templateId          -> template that mails YOU the inquiry
+                          (To Email = your address)
+   autoReplyTemplateId -> template that mails the VISITOR a thank-you
+                          (To Email = {{to_email}})
+   Leave autoReplyTemplateId as is to skip the thank-you mail.
+   Variables available in both templates:
+   {{from_name}} {{from_email}} {{to_email}} {{reply_to}} {{type}}
+   {{budget}} {{message}} {{subject}} (also {{name}} {{email}} {{title}})
    ===================================================== */
-var EMAILJS_CONFIG={publicKey:'uKyqY3aBYCmwmKcS-',serviceId:'service_nhe07s5',templateId:'template_d0x2kmj'};
+var EMAILJS_CONFIG={publicKey:'uKyqY3aBYCmwmKcS',serviceId:'service_nhe07s5',templateId:'template_d0x2kmj',autoReplyTemplateId:'template_35xhl1b'};
 
 (function(){
 var TO='darshan.gondaliya0261@gmail.com',R=document.documentElement,$=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
@@ -73,15 +78,17 @@ $$('[data-hire]').forEach(function(b){b.addEventListener('click',function(){dlg.
 $('#close').addEventListener('click',function(){dlg.close()});
 var EJ=EMAILJS_CONFIG;
 function ejReady(){return !!window.emailjs&&[EJ.publicKey,EJ.serviceId,EJ.templateId].every(function(k){return k&&k.indexOf('YOUR_')!==0})}
+function autoOn(){return !!EJ.autoReplyTemplateId&&EJ.autoReplyTemplateId.indexOf('YOUR_')!==0}
+function sendAll(p){return emailjs.send(EJ.serviceId,EJ.templateId,p).then(function(){return autoOn()?emailjs.send(EJ.serviceId,EJ.autoReplyTemplateId,p).catch(function(){}):0})}
 if(ejReady())emailjs.init({publicKey:EJ.publicKey});
 function viaMailto(p){location.href='mailto:'+TO+'?subject='+encodeURIComponent(p.subject)+'&body='+encodeURIComponent('Name: '+p.from_name+'\nEmail: '+p.from_email+'\nType: '+p.type+'\nBudget: '+p.budget+'\n\n'+p.message)}
 function submit(form,subject,status,done){
 var d=new FormData(form),btn=form.querySelector('button[type=submit]'),label=btn.textContent;
-var p={name:d.get('name'),email:d.get('email'),title:subject,from_name:d.get('name'),from_email:d.get('email'),reply_to:d.get('email'),type:d.get('type')||'Hire request',budget:d.get('budget')||'Not specified',message:d.get('message'),subject:subject+' from '+d.get('name')};
+var p={to_email:d.get('email'),name:d.get('name'),email:d.get('email'),title:subject,from_name:d.get('name'),from_email:d.get('email'),reply_to:d.get('email'),type:d.get('type')||'Hire request',budget:d.get('budget')||'Not specified',message:d.get('message'),subject:subject+' from '+d.get('name')};
 status.className='ok';
 if(!ejReady()){viaMailto(p);status.textContent='Your email app should open with the message ready to send.';status.classList.add('show');return}
 btn.disabled=true;btn.textContent='Sending…';
-emailjs.send(EJ.serviceId,EJ.templateId,p).then(function(){form.reset();status.textContent='Thank you! Your message has been sent. I’ll reply soon.';status.classList.add('show');if(done)done()},function(){status.textContent='Sorry, the message could not be sent. Please email me directly.';status.classList.add('show','err')}).finally(function(){btn.disabled=false;btn.textContent=label})}
+sendAll(p).then(function(){form.reset();status.textContent='Thank you! Your message has been sent. I’ll reply soon.';status.classList.add('show');if(done)done()},function(){status.textContent='Sorry, the message could not be sent. Please email me directly.';status.classList.add('show','err')}).finally(function(){btn.disabled=false;btn.textContent=label})}
 $('#cform').addEventListener('submit',function(e){e.preventDefault();submit(e.target,'Portfolio enquiry',$('#ok'))});
 $('#hform').addEventListener('submit',function(e){e.preventDefault();submit(e.target,'Hire request',$('#hok'),function(){setTimeout(function(){dlg.close();$('#hok').className='ok'},1800)})});
 $('#theme').addEventListener('click',function(){R.dataset.theme=R.dataset.theme==='dark'?'light':'dark'});
