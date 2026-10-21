@@ -11,7 +11,7 @@
    {{from_name}} {{from_email}} {{to_email}} {{reply_to}} {{type}}
    {{budget}} {{message}} {{subject}} (also {{name}} {{email}} {{title}})
    ===================================================== */
-var EMAILJS_CONFIG={publicKey:'uKyqY3aBYCmwmKcS',serviceId:'service_nhe07s5',templateId:'template_d0x2kmj',autoReplyTemplateId:'template_35xhl1b'};
+var EMAILJS_CONFIG={publicKey:'uKyqY3aBYCmwmKcS-',serviceId:'service_nhe07s5',templateId:'template_d0x2kmj',autoReplyTemplateId:'template_35xhl1b'};
 
 (function(){
 var TO='darshan.gondaliya0261@gmail.com',R=document.documentElement,$=function(s){return document.querySelector(s)},$$=function(s){return [].slice.call(document.querySelectorAll(s))};
